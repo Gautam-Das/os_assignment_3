@@ -16,7 +16,6 @@ struct argument {
     int right;
     int level;
 };
-struct argument * buildArgs(int left, int right, int level);
 */
 
 void print_array_(int left, int right, int *array) {
