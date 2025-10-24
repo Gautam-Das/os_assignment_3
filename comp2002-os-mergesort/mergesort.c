@@ -3,6 +3,7 @@
  */
 
 #include "mergesort.h"
+#include <semaphore.h>
 #include <stdio.h>
 #include <stdlib.h> /* for malloc */
 #include <string.h> /* for memcpy */
@@ -28,6 +29,8 @@ void print_array_(int left, int right, int *array) {
 
 // using coarse lock for now, can be optimized to use a different lock for each thread
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+sem_t threads_semaphore;
+int MAX_LEVELS = 10;
 
 /* this function will be called by mergesort() and also by parallel_mergesort().
 the bounds are inclusive
@@ -98,10 +101,14 @@ void my_mergesort(int left, int right) {
 /* this function will be called by the testing program. */
 void *parallel_mergesort(void *arg) {
     struct argument *args = (struct argument *)arg;
-    // printf("left: %d, right: %d, levels: %d\n", args->left, args->right, args->level);
-    // print_array_(args->left, args->right, A);
+    // printf("left: %d, right: %d, (middle: %d), levels: %d\n", args->left, args->right, (args->left + args->right) / 2, args->level);
 
-    if (args->level == cutoff) {
+    // print_array_(args->left, args->right, A);
+    if (args->left >= args->right) {
+        return NULL;
+    }
+
+    if (args->level == cutoff || args->level == MAX_LEVELS) {
         my_mergesort(args->left, args->right);
         return NULL;
     }
