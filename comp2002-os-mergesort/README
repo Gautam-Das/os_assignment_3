@@ -1,0 +1,85 @@
+## Operating Systems Assignment 3 - Concurrency
+
+* Authors: Gautam Das, Cuinn Kemp, Rylan Ford
+* Group: 132
+
+## Overview
+
+This project implements a multi-threaded version of the merge sort
+algorithm in C, otherwise known as parallel merge sort. This work has
+been undertaken to demonstrate inter-thread synchronisation using the
+pthread library. 
+
+## Manifest
+
+```
+Makefile # Useage: make, make clean
+mergesort.c # Contains core functionality of merge sort
+mergesort.h # Function definitions for mergesort.c
+test-mergesort.c # Contains functionality for testing mergesort
+README
+```
+
+## Building the project
+
+The test-mergesort script can be run through the following sequence:
+
+```
+Make
+./test-mergesort <input_size> <cutoff_level> <seed>
+```
+
+To remove make files, run:
+
+```
+Make clean
+```
+
+## Features and usage
+
+This program demonstrates the time speedup when running parallel merge sort
+with increasing cutoff levels. In each cutoff level, the array is split so
+that both segments can be passed to individual threads. The uses specifies 
+the maximum number of levels in which this occurs. A significant incremental
+speedup can be observed when increasing the cutoff level from 0 (i.e. serial
+merge sort) to 5. Beyond this point, the cutoff threshold is no longer the
+bottle neck. 
+
+To observe this pattern, the following sequence of inputs can be tested:
+
+```
+./test_mergesort 100000000 0 1234
+./test_mergesort 100000000 1 1234
+./test_mergesort 100000000 2 1234
+./test_mergesort 100000000 3 1234
+./test_mergesort 100000000 4 1234
+./test_mergesort 100000000 5 1234
+./test_mergesort 100000000 6 1234
+```
+
+## Testing
+
+Testing was conducted according to assignment specification using an input
+size of 100,000,000 and variable cutoff levels in the range 0-8. Multiple 
+random seeds were also used throughout testing to validate results. The
+test-mergesort.c script contains functionality to ensure that arrays are 
+correctly sorted meaning testing was conducted primarily to verify that
+increasing the cutoff level (i.e. using multiprocessing) did result in an
+expected speedup by at least a factor of 2. 
+
+## Reflection and Self Assessment
+
+Discuss the issues you encountered during development and testing. What
+problems did you have? What did you have to research and learn on your own?
+What kinds of errors did you get? How did you fix them?
+
+What parts of the project did you find challenging? Is there anything that
+finally "clicked" for you in the process of working on this project? How well
+did the development and testing process go for you?
+
+## Sources Used
+
+If you used any sources outside of the textbook, you should list them here. 
+If you looked something up on stackoverflow.com or you use help from AI, and 
+fail to cite it in this section, it will be considered plagiarism and dealt 
+with accordingly. So be safe CITE!
