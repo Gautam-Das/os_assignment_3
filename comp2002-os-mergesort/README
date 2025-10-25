@@ -68,18 +68,8 @@ increasing the cutoff level (i.e. using multiprocessing) did result in an
 expected speedup by at least a factor of 2. 
 
 ## Reflection and Self Assessment
+The main issue we had with the development was dealing with extreme cutoffs. Our initial implementation would fail for cutoff > 14. We came to the conclusion that this was due to threads starving just due to the sheer number of them. For example, a cutoff of 14, causes 2^14 (16384) threads to spawn, which our machines could not handle. To fix these we tried using a semaphore to limit the number of threads being created. But that didn't since a thread could spawn child threads, that won't run due to a semaphore blocking them, leading to deadlock. So, to address the issues, we limited the cutoff to 13 levels, leading to 8192 threads, which fixed the starvation issue. Later research showed that on some systems a process isn't alloweed to have more than 2-4000 threads, which was the reason for crashing on some devices.
 
-Discuss the issues you encountered during development and testing. What
-problems did you have? What did you have to research and learn on your own?
-What kinds of errors did you get? How did you fix them?
-
-What parts of the project did you find challenging? Is there anything that
-finally "clicked" for you in the process of working on this project? How well
-did the development and testing process go for you?
+The project was generally quite easy without any major issues except for the one mentioned above. The development and testing process was pretty good as we wrote a python script for testing extreme edge cases along with analysing the performance.
 
 ## Sources Used
-
-If you used any sources outside of the textbook, you should list them here. 
-If you looked something up on stackoverflow.com or you use help from AI, and 
-fail to cite it in this section, it will be considered plagiarism and dealt 
-with accordingly. So be safe CITE!

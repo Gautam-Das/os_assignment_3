@@ -27,8 +27,6 @@ void print_array_(int left, int right, int *array) {
     printf("\n");
 }
 
-// using coarse lock for now, can be optimized to use a different lock for each thread
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 sem_t threads_semaphore;
 int MAX_LEVELS = 10;
 
@@ -36,9 +34,6 @@ int MAX_LEVELS = 10;
 the bounds are inclusive
 */
 void merge(int leftstart, int leftend, int rightstart, int rightend) {
-    // printf("before merge:\n");
-    // print_array_(leftstart, rightend, A);
-
     // using a naive approach
     // place into B in sorted order
     // then copy back into A
@@ -55,32 +50,24 @@ void merge(int leftstart, int leftend, int rightstart, int rightend) {
         }
         target_index++;
     }
-    // print_array_(leftstart, rightend, B);
-    // printf("left_index; %d, right_index %d\n", left_index, right_index);
 
     while (left_index <= leftend) {
-        // printf("adding from left\n");
         B[target_index] = A[left_index];
         left_index++;
         target_index++;
     }
 
     while (right_index <= rightend) {
-        // printf("adding from right\n");
         B[target_index] = A[right_index];
         right_index++;
         target_index++;
     }
 
-    // print_array_(leftstart, rightend, B);
     int i = leftstart;
     while (i <= rightend) {
         A[i] = B[i];
         i++;
     }
-
-    // printf("after merge:\n");
-    // print_array_(leftstart, rightend, A);
 }
 
 /* this function will be called by parallel_mergesort() as its base case. */
@@ -101,9 +88,7 @@ void my_mergesort(int left, int right) {
 /* this function will be called by the testing program. */
 void *parallel_mergesort(void *arg) {
     struct argument *args = (struct argument *)arg;
-    // printf("left: %d, right: %d, (middle: %d), levels: %d\n", args->left, args->right, (args->left + args->right) / 2, args->level);
 
-    // print_array_(args->left, args->right, A);
     if (args->left >= args->right) {
         return NULL;
     }
@@ -125,7 +110,6 @@ void *parallel_mergesort(void *arg) {
 
     merge(args->left, middle, middle + 1, args->right);
 
-    // print_array_(args->left, args->right, A);
     return NULL;
 }
 
