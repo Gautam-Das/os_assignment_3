@@ -109,6 +109,9 @@ void *parallel_mergesort(void *arg) {
 
     merge(args->left, middle, middle + 1, args->right);
 
+    free(left_args);
+    free(right_args);
+
     return NULL;
 }
 
