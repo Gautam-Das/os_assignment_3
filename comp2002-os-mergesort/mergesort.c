@@ -102,11 +102,10 @@ void *parallel_mergesort(void *arg) {
     struct argument *right_args = buildArgs(middle + 1, args->right, args->level + 1);
 
     pthread_t left_thread;
-    pthread_t right_thread;
     pthread_create(&left_thread, NULL, parallel_mergesort, left_args);
-    pthread_create(&right_thread, NULL, parallel_mergesort, right_args);
+    parallel_mergesort(right_args);
+    
     pthread_join(left_thread, NULL);
-    pthread_join(right_thread, NULL);
 
     merge(args->left, middle, middle + 1, args->right);
 
